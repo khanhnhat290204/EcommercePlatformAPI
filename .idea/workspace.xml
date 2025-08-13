@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a17bb2b-87db-41f3-9027-3f0bc89b56c3" name="Changes" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_31_2025_11_18_PM_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_31_2025_11_18_PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ecomhub/ecomhub/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecomhub/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecomhub/ecommerces/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecommerces/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecomhub/ecommerces/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecommerces/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecomhub/ecommerces/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecommerces/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecomhub/ecommerces/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecommerces/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecomhub/ecommerces/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/ecommerces/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecomhub/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ecomhub/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,16 +35,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
-    &quot;Python.views.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/EcommercePlatform&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.dashboard.executor": "Run",
+    "Python.views.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/EcommercePlatform"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

@@ -51,9 +51,9 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = {'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'}
 
-import pymysql
-
-pymysql.install_as_MySQLdb()
+# import pymysql
+#
+# pymysql.install_as_MySQLdb()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,11 +89,12 @@ WSGI_APPLICATION = 'ecomhub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'e_commercedb',
-        'USER': 'root',
-        'PASSWORD': 'Khanhnhat2902',
-        'HOST': ''  # mặc định localhost
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ecommercedb',
+        'USER': 'ecommercedb_v56v_user',
+        'PASSWORD': 'B8XdqCGlQusGBzvojLem7g40JBw3bgrN',
+        'HOST': 'dpg-d2e3q57diees73d7vbf0-a',
+        'PORT':'5432' # mặc định localhost
     }
 }
 
