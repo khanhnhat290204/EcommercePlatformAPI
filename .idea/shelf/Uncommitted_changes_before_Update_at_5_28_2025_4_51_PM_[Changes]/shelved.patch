@@ -1,0 +1,1079 @@
+Index: ecomsaleapp/configs/Apis.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import axios from \"axios\";\r\n\r\n// const BASE_URL = process.env.REACT_APP_DOMAIN;\r\n\r\nconst BASE_URL=\"https://ecomsaletestapi.onrender.com/\"\r\n\r\nexport const endpoints = {\r\n    'categorys': '/categorys/',\r\n    'users': '/users/',\r\n    'shops': '/shops/',\r\n    'products': '/products/',\r\n    'comments': '/comments/',\r\n    'comment-detail': (commentId) => `/comments/${commentId}/`,\r\n    'comment-reply': (commentId) => `/comments/${commentId}/reply/`,\r\n    'comment-replies': (commentId) => `/comments/${commentId}/replies/`,\r\n    'comment-like': (commentId)=>`/comments/${commentId}/like/`,\r\n    'orders': '/orders/',\r\n    'cancel-order': (orderId)=>`/orders/${orderId}/order_cancel/`,\r\n    'payments': '/payments/',\r\n    'paypal-payment': (paymentId) => `/payments/${paymentId}/create_paypal_payment/`,\r\n    'my-cart': '/carts/my_cart/',\r\n    'add-cart': '/carts/add_product/',\r\n    'remove-product-cart': '/carts/remove_product/',\r\n    'token':'/o/token/',\r\n    'current_user':'/users/current-user/',\r\n    'product': (productId) => `/products/${productId}/`,\r\n    'product-comments': (productId)=>`/products/${productId}/comments/`,\r\n    'my-shop':'/shops/my_shop/',\r\n    'shop-detail':(shopId)=>`/shops/${shopId}/products/`,\r\n    'create-product':(shopId)=>`/shops/${shopId}/create_product/`,\r\n    'shop-stat':'/shop/stats/'\r\n}\r\n\r\nexport const authApis=(token)=>{\r\n    return axios.create({\r\n        baseURL:BASE_URL,\r\n        headers:{\r\n            \"Authorization\":`Bearer ${token}`\r\n        }\r\n    })\r\n}\r\n\r\nexport default axios.create({\r\n    baseURL: BASE_URL\r\n});
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/configs/Apis.js b/ecomsaleapp/configs/Apis.js
+--- a/ecomsaleapp/configs/Apis.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/configs/Apis.js	(date 1748425714929)
+@@ -7,6 +7,7 @@
+ export const endpoints = {
+     'categorys': '/categorys/',
+     'users': '/users/',
++    'user-by-id': (userId) => `/users/${userId}/`,
+     'shops': '/shops/',
+     'products': '/products/',
+     'comments': '/comments/',
+@@ -16,6 +17,7 @@
+     'comment-like': (commentId)=>`/comments/${commentId}/like/`,
+     'orders': '/orders/',
+     'cancel-order': (orderId)=>`/orders/${orderId}/order_cancel/`,
++    'history-orders': '/orders/history_orders/',
+     'payments': '/payments/',
+     'paypal-payment': (paymentId) => `/payments/${paymentId}/create_paypal_payment/`,
+     'my-cart': '/carts/my_cart/',
+Index: ecomsaleapp/components/Cart/Styles.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { StyleSheet } from \"react-native\";\r\n\r\nconst Styles = StyleSheet.create({\r\n    barHeader: {\r\n        flexDirection: 'row',\r\n        alignItems: 'center',\r\n        backgroundColor: '#fff',\r\n        paddingHorizontal: 12,\r\n        paddingVertical: 8,\r\n        borderBottomWidth: 1,\r\n        borderColor: '#e0e0e0',\r\n        position: 'absolute',\r\n        top: 0,\r\n        left: 0,\r\n        right: 0,\r\n        zIndex: 999,\r\n        elevation: 4,\r\n        shadowColor: '#000',\r\n        shadowOffset: { width: 0, height: 2 },\r\n        shadowOpacity: 0.1,\r\n        shadowRadius: 3,\r\n    },\r\n\r\n    barFooter: {\r\n        flexDirection: 'row',\r\n        backgroundColor: '#fff',\r\n        borderTopWidth: 1,\r\n        borderColor: '#ccc',\r\n        justifyContent: 'space-between',\r\n        alignItems: 'center',\r\n        padding: 10,\r\n        position: 'absolute',\r\n        bottom: 0,\r\n        left: 0,\r\n        right: 0,\r\n        zIndex: 999,\r\n    }, \r\n\r\n    buyNowButton: {\r\n        backgroundColor: '#F44336',\r\n        alignItems: \"center\",\r\n        height: \"100%\",\r\n        flex: 2,\r\n        justifyContent: \"flex-end\",\r\n    },\r\n\r\n    productPriceText: {\r\n        fontSize: 18,\r\n        color: \"#e91e63\",\r\n        fontWeight: \"500\",\r\n        justifyContent: \"flex-start\"\r\n    },\r\n\r\n    returnButton: {\r\n        flex: 0.8,\r\n        alignItems: \"flex-start\",\r\n        justifyContent: \"center\",\r\n    },\r\n});\r\n\r\nexport default Styles;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/Cart/Styles.js b/ecomsaleapp/components/Cart/Styles.js
+--- a/ecomsaleapp/components/Cart/Styles.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/components/Cart/Styles.js	(date 1748425714929)
+@@ -56,6 +56,16 @@
+         alignItems: "flex-start",
+         justifyContent: "center",
+     },
++
++    textMyCart: {
++        position: 'absolute',
++        left: 0,
++        right: 0,
++        textAlign: 'center',
++        fontSize: 18,
++        fontWeight: 'bold',
++        zIndex: -1
++    }
+ });
+ 
+ export default Styles;
+\ No newline at end of file
+Index: ecomsaleapp/components/Chat/Chat.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useEffect, useMemo, useState } from \"react\";\r\nimport { Text, View, TextInput, Button, FlatList } from \"react-native\";\r\nimport { db } from \"../../configs/firebaseConfig\"; // cập nhật đường dẫn nếu cần\r\nimport { ref, push, onValue } from \"firebase/database\";\r\nimport AsyncStorage from \"@react-native-async-storage/async-storage\";\r\nimport { v4 as uuidv4 } from \"uuid\";\r\nimport 'react-native-get-random-values';\r\n\r\nconst Chat = ({route}) => {\r\n    const {shop} = route.params;\r\n\r\n    const [userId, setUserId] = useState(null);\r\n    const shopOwnerId = shop?.user?.id;\r\n    const [message, setMessage] = useState(\"\");\r\n    const [messages, setMessages] = useState([]);\r\n\r\n    useEffect(() => {\r\n        const fetchUser = async () => {\r\n            const id = await AsyncStorage.getItem(\"userId\");\r\n            setUserId(id);\r\n        };\r\n        fetchUser();\r\n    }, []);\r\n\r\n    const chatId = useMemo(() => {\r\n        if (!userId || !shopOwnerId) return null;\r\n        return Number(userId) < Number(shopOwnerId)\r\n            ? `${userId}_${shopOwnerId}`\r\n            : `${shopOwnerId}_${userId}`;\r\n    }, [userId, shopOwnerId]);\r\n\r\n    useEffect(() => {\r\n        if (!userId || !chatId) return;\r\n\r\n        const messagesRef = ref(db, `chats/${chatId}/messages`);\r\n        const unsubscribe = onValue(messagesRef, (snapshot) => {\r\n            const data = snapshot.val();\r\n            if (data) {\r\n                const msgs = Object.values(data).sort((a, b) => a.timestamp - b.timestamp);\r\n                setMessages(msgs);\r\n            } else {\r\n                setMessages([]);\r\n            }\r\n        });\r\n\r\n        return () => unsubscribe();\r\n    }, [chatId, userId]);\r\n\r\n    useEffect(() => {\r\n        console.log(\"Chat ID thay đổi:\", chatId);\r\n    }, [chatId]);\r\n\r\n    const handleSend = async () => {\r\n        console.log(\"ID user gui: \", userId);\r\n        console.log(\"ID chat: \", chatId);\r\n        console.log(\"Message state: '\", message, \"'\");\r\n\r\n        if (!userId || !chatId) {\r\n            console.log(\"Dừng vì userId hoặc chatId bị thiếu.\");\r\n            return;\r\n        }\r\n\r\n        if (!message || !message.trim()) {\r\n            console.warn(\"CẢNH BÁO: Tin nhắn đang rỗng hoặc chỉ chứa khoảng trắng.\");\r\n        }\r\n\r\n        console.log(\"CHUẨN BỊ TẠO newMessage object...\");\r\n\r\n        try {\r\n            const newMessage = {\r\n                id: uuidv4(),\r\n                senderId: userId,\r\n                text: message,\r\n                timestamp: Date.now(),\r\n            };\r\n\r\n            console.info(\"newMessage object được tạo:\", newMessage);\r\n\r\n            console.log(\"Đang gửi tin nhắn tới path:\", `chats/${chatId}/messages`);\r\n\r\n            const messageRef = ref(db, `chats/${chatId}/messages`);\r\n            await push(messageRef, newMessage)\r\n                .then(() => {\r\n                    console.log(\"Message sent successfully!\");\r\n                    setMessage(\"\");\r\n                })\r\n                .catch((error) => {\r\n                    console.error(\"LỖI KHI THỰC HIỆN PUSH TIN NHẮN:\", error);\r\n                });\r\n\r\n        } catch (e) {\r\n            console.error(\"LỖI ĐỒNG BỘ TRONG handleSend (ví dụ: uuidv4() thất bại):\", e);\r\n        }\r\n    };\r\n\r\n    return (\r\n        <View style={{ flex: 1, padding: 16 }}>\r\n            <Text>ID Shop: {shop?.id}</Text>\r\n            <Text>Tên cửa hàng: {shop?.name}</Text>\r\n            <Text>Chủ shop: {shopOwnerId}</Text>\r\n\r\n            <FlatList\r\n                data={messages}\r\n                keyExtractor={(item) => item.id}\r\n                renderItem={({ item }) => {\r\n                    const isCurrentUser = item.senderId === userId;\r\n                    return (\r\n                        <View\r\n                            style={{\r\n                                flexDirection: \"row\",\r\n                                justifyContent: isCurrentUser ? \"flex-end\" : \"flex-start\",\r\n                                marginVertical: 4,\r\n                            }}\r\n                        >\r\n                            <View\r\n                                style={{\r\n                                    backgroundColor: isCurrentUser ? \"#DCF8C6\" : \"#E5E5EA\",\r\n                                    padding: 10,\r\n                                    borderRadius: 12,\r\n                                    maxWidth: \"75%\",\r\n                                    alignSelf: isCurrentUser ? \"flex-end\" : \"flex-start\",\r\n                                }}\r\n                            >\r\n                                <Text style={{ color: \"#000\" }}>{item.text}</Text>\r\n                            </View>\r\n                        </View>\r\n                    );\r\n                }}\r\n            />\r\n\r\n            <View style={{ flexDirection: \"row\", alignItems: \"center\" }}>\r\n                <TextInput\r\n                    style={{\r\n                        flex: 1,\r\n                        borderWidth: 1,\r\n                        padding: 8,\r\n                        borderRadius: 4,\r\n                        marginRight: 8,\r\n                    }}\r\n                    value={message}\r\n                    onChangeText={setMessage}\r\n                    placeholder=\"Nhập tin nhắn...\"\r\n                />\r\n                <Button title=\"Gửi\" onPress={handleSend} />\r\n            </View>\r\n        </View>\r\n    );\r\n}\r\n\r\nexport default Chat;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/Chat/Chat.js b/ecomsaleapp/components/Chat/Chat.js
+--- a/ecomsaleapp/components/Chat/Chat.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/components/Chat/Chat.js	(date 1748425714929)
+@@ -1,37 +1,72 @@
+ import React, { useEffect, useMemo, useState } from "react";
+-import { Text, View, TextInput, Button, FlatList } from "react-native";
+-import { db } from "../../configs/firebaseConfig"; // cập nhật đường dẫn nếu cần
+-import { ref, push, onValue } from "firebase/database";
++import { Text, View, TextInput, Button, FlatList, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator } from "react-native";
++import { db } from "../../configs/firebaseConfig";
++import { ref, push, onValue, set } from "firebase/database";
+ import AsyncStorage from "@react-native-async-storage/async-storage";
+ import { v4 as uuidv4 } from "uuid";
++import * as ImgPicker from 'expo-image-picker';
+ import 'react-native-get-random-values';
++import Apis, { endpoints } from "../../configs/Apis";
++import AntDesign from 'react-native-vector-icons/AntDesign';
++import FontAwesome from 'react-native-vector-icons/FontAwesome';
++import formatTime from "../../utils/formatTime";
++import { useNavigation } from "@react-navigation/native";
+ 
+-const Chat = ({route}) => {
+-    const {shop} = route.params;
++const Chat = ({ route }) => {
++    const { shop, otherUserId } = route.params;
+ 
+     const [userId, setUserId] = useState(null);
+-    const shopOwnerId = shop?.user?.id;
++    const [oUserId, setOUserId] = useState(null);
+     const [message, setMessage] = useState("");
+     const [messages, setMessages] = useState([]);
++    const [image, setImage] = useState(null);
++    const [otherUser, setOtherUser] = useState({});
++    const [checkLoggedIn, setCheckLoggedIn] = useState(false);
++    const navigation = useNavigation();
++    const getOtherUser = async () => {
++        try {
++            const res = await Apis.get(endpoints['user-by-id'](oUserId));
++            setOtherUser(res.data);
++        } catch (e) {
++            console.error(e);
++        }
++    };
++
++    useEffect(()=>{
++        const checkLoggedIn = async () => {
++            const res = await AsyncStorage.getItem("token");
++            if (res) {
++                setCheckLoggedIn(true);
++            } else {
++                setCheckLoggedIn(false);
++            }
++        }
++
++        checkLoggedIn();
++    }, [])
++
++    useEffect(() => {
++        if (oUserId) getOtherUser();
++    }, [oUserId]);
+ 
+     useEffect(() => {
+         const fetchUser = async () => {
+             const id = await AsyncStorage.getItem("userId");
+             setUserId(id);
++            if (shop?.user?.id) setOUserId(shop.user.id);
++            else if (otherUserId) setOUserId(otherUserId);
+         };
+         fetchUser();
+-    }, []);
++    }, [shop, otherUserId]);
+ 
+     const chatId = useMemo(() => {
+-        if (!userId || !shopOwnerId) return null;
+-        return Number(userId) < Number(shopOwnerId)
+-            ? `${userId}_${shopOwnerId}`
+-            : `${shopOwnerId}_${userId}`;
+-    }, [userId, shopOwnerId]);
++        if (!userId || !oUserId) return null;
++        const sortedIds = [userId, oUserId].sort();
++        return `${sortedIds[0]}_${sortedIds[1]}`;
++    }, [userId, oUserId]);
+ 
+     useEffect(() => {
+         if (!userId || !chatId) return;
+-
+         const messagesRef = ref(db, `chats/${chatId}/messages`);
+         const unsubscribe = onValue(messagesRef, (snapshot) => {
+             const data = snapshot.val();
+@@ -42,109 +77,242 @@
+                 setMessages([]);
+             }
+         });
+-
+         return () => unsubscribe();
+     }, [chatId, userId]);
+ 
+-    useEffect(() => {
+-        console.log("Chat ID thay đổi:", chatId);
+-    }, [chatId]);
+-
+     const handleSend = async () => {
+-        console.log("ID user gui: ", userId);
+-        console.log("ID chat: ", chatId);
+-        console.log("Message state: '", message, "'");
+-
+-        if (!userId || !chatId) {
+-            console.log("Dừng vì userId hoặc chatId bị thiếu.");
+-            return;
+-        }
+-
+-        if (!message || !message.trim()) {
+-            console.warn("CẢNH BÁO: Tin nhắn đang rỗng hoặc chỉ chứa khoảng trắng.");
+-        }
+-
+-        console.log("CHUẨN BỊ TẠO newMessage object...");
++        if (!userId || !chatId || (!message && !image)) return;
+ 
+         try {
++            let imagePath = null;
++            if (image) {
++                imagePath = await uploadImgToCloudinary();
++            }
++
+             const newMessage = {
+                 id: uuidv4(),
+                 senderId: userId,
+                 text: message,
++                image: imagePath ? `https://res.cloudinary.com/dwivkhh8t/${imagePath}` : null,
++                timestamp: Date.now(),
++            };
++
++            await push(ref(db, `chats/${chatId}/messages`), newMessage);
++            await set(ref(db, `chatsMetadata/${chatId}`), {
++                buyerId: userId,
++                sellerId: oUserId,
++                lastMessage: message || "Đã gửi hình ảnh",
+                 timestamp: Date.now(),
+-            };
+-
+-            console.info("newMessage object được tạo:", newMessage);
++            });
+ 
+-            console.log("Đang gửi tin nhắn tới path:", `chats/${chatId}/messages`);
+-
+-            const messageRef = ref(db, `chats/${chatId}/messages`);
+-            await push(messageRef, newMessage)
+-                .then(() => {
+-                    console.log("Message sent successfully!");
+-                    setMessage("");
+-                })
+-                .catch((error) => {
+-                    console.error("LỖI KHI THỰC HIỆN PUSH TIN NHẮN:", error);
+-                });
+-
++            setMessage("");
++            setImage(null);
+         } catch (e) {
+-            console.error("LỖI ĐỒNG BỘ TRONG handleSend (ví dụ: uuidv4() thất bại):", e);
++            console.error(e);
+         }
+     };
++
++    const pickImage = async () => {
++        let { status } = await ImgPicker.requestMediaLibraryPermissionsAsync();
++        if (status !== 'granted') {
++            alert("Permission denied!");
++        } else {
++            const r = await ImgPicker.launchImageLibraryAsync();
++            if (!r.canceled) setImage(r.assets[0]);
++        }
++    };
++
++    const uploadImgToCloudinary = async () => {
++        if (!image) return null;
++
++        const formData = new FormData();
++        formData.append("file", {
++            uri: image.uri,
++            type: "image/jpeg",
++            name: "upload.jpg",
++        });
++        formData.append("upload_preset", "ecomsale");
++
++        const response = await fetch("https://api.cloudinary.com/v1_1/dwivkhh8t/image/upload", {
++            method: "POST",
++            body: formData,
++            headers: { "Content-Type": "multipart/form-data" },
++        });
++
++        const resJson = await response.json();
++        const path = resJson.secure_url.substring(resJson.secure_url.indexOf("image/upload"));
++        return path;
++    };
+ 
+     return (
+-        <View style={{ flex: 1, padding: 16 }}>
+-            <Text>ID Shop: {shop?.id}</Text>
+-            <Text>Tên cửa hàng: {shop?.name}</Text>
+-            <Text>Chủ shop: {shopOwnerId}</Text>
++        <KeyboardAvoidingView style={styles.container}>
++            <View style={styles.header}>
++                {otherUser?.avatar?
++                    <View style={styles.userInfo}>
++                        <Image source={{ uri: `https://res.cloudinary.com/dwivkhh8t/${otherUser.avatar}` }} style={styles.avatar} />
++                        <Text style={styles.username}>{otherUser.username}</Text>
++                    </View>:<ActivityIndicator size="large" color="#0000ff" />
++                }
++            </View>
+ 
+-            <FlatList
+-                data={messages}
+-                keyExtractor={(item) => item.id}
+-                renderItem={({ item }) => {
+-                    const isCurrentUser = item.senderId === userId;
+-                    return (
+-                        <View
+-                            style={{
+-                                flexDirection: "row",
+-                                justifyContent: isCurrentUser ? "flex-end" : "flex-start",
+-                                marginVertical: 4,
+-                            }}
+-                        >
+-                            <View
+-                                style={{
+-                                    backgroundColor: isCurrentUser ? "#DCF8C6" : "#E5E5EA",
+-                                    padding: 10,
+-                                    borderRadius: 12,
+-                                    maxWidth: "75%",
+-                                    alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+-                                }}
+-                            >
+-                                <Text style={{ color: "#000" }}>{item.text}</Text>
+-                            </View>
+-                        </View>
+-                    );
+-                }}
+-            />
++            {checkLoggedIn === false ? (
++                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
++                    <Text style={{ color: "red", fontSize: 16, fontWeight: "bold" }}>Vui lòng đăng nhập để nhắn với cửa hàng!</Text>
++                </View>
++            ) : (
++                <>
++                    <FlatList
++                        data={messages}
++                        keyExtractor={(item) => item.id}
++                        style={styles.messageList}
++                        renderItem={({ item }) => {
++                            const isCurrentUser = item.senderId === userId;
++                            return (
++                                <View style={[styles.messageContainer, isCurrentUser ? styles.currentUser : styles.otherUser]}>
++                                    <View style={[styles.messageBubble, { backgroundColor: isCurrentUser ? "#DCF8C6" : "#E5E5EA" }]}>
++                                        {item.text && <Text style={styles.messageText}>{item.text}</Text>}
++                                        {item.image && (
++                                            <Image source={{ uri: item.image }} style={styles.messageImage} />
++                                        )}
++                                        <Text style={styles.timestamp}>{formatTime(item.timestamp)}</Text>
++                                    </View>
++                                </View>
++                            );
++                        }}
++                    />
+ 
+-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+-                <TextInput
+-                    style={{
+-                        flex: 1,
+-                        borderWidth: 1,
+-                        padding: 8,
+-                        borderRadius: 4,
+-                        marginRight: 8,
+-                    }}
+-                    value={message}
+-                    onChangeText={setMessage}
+-                    placeholder="Nhập tin nhắn..."
+-                />
+-                <Button title="Gửi" onPress={handleSend} />
+-            </View>
+-        </View>
++                    <View style={styles.inputContainer}>
++                        <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
++                            <Text style={styles.imagePickerText}>
++                                <FontAwesome name="image" size={24} color="#2196F3" />
++                            </Text>
++                        </TouchableOpacity>
++                        <TextInput
++                            style={styles.textInput}
++                            value={message}
++                            onChangeText={setMessage}
++                            placeholder="Nhập tin nhắn..."
++                        />
++                        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
++                            <Text style={styles.sendText}>Gửi</Text>
++                        </TouchableOpacity>
++                    </View>
++                </>
++            )}
++        </KeyboardAvoidingView>
+     );
+-}
++};
++
++export default Chat;
+ 
+-export default Chat;
+\ No newline at end of file
++const styles = StyleSheet.create({
++    container: {
++        flex: 1,
++        backgroundColor: "#f4f6f8",
++    },
++    header: {
++        padding: 16,
++        backgroundColor: "#ffffff",
++        borderBottomWidth: 1,
++        borderColor: "#ddd",
++    },
++    shopText: {
++        fontSize: 16,
++        fontWeight: "bold",
++        color: "#444",
++    },
++    userInfo: {
++        flexDirection: "row",
++        alignItems: "center",
++        marginTop: 8,
++    },
++    avatar: {
++        width: 36,
++        height: 36,
++        borderRadius: 18,
++        marginRight: 10,
++    },
++    username: {
++        fontSize: 15,
++        fontWeight: "600",
++        color: "#333",
++    },
++    messageList: {
++        flex: 1,
++        padding: 10,
++    },
++    messageContainer: {
++        marginVertical: 4,
++        flexDirection: "row",
++        paddingBottom: 30,
++    },
++    currentUser: {
++        justifyContent: "flex-end",
++    },
++    otherUser: {
++        justifyContent: "flex-start",
++    },
++    messageBubble: {
++        padding: 10,
++        borderRadius: 12,
++        maxWidth: "70%",
++    },
++    messageText: {
++        color: "#000",
++    },
++    messageImage: {
++        marginTop: 5,
++        width: 150,
++        height: 150,
++        borderRadius: 8,
++    },
++    inputContainer: {
++        flexDirection: "row",
++        alignItems: "center",
++        padding: 10,
++        borderTopWidth: 1,
++        backgroundColor: "#fff",
++        borderColor: "#ddd",
++    },
++    imagePicker: {
++        backgroundColor: "#d0e0fc",
++        paddingVertical: 8,
++        paddingHorizontal: 12,
++        borderRadius: 8,
++        marginRight: 5,
++    },
++    imagePickerText: {
++        color: "#0056b3",
++        fontWeight: "600",
++    },
++    textInput: {
++        flex: 1,
++        backgroundColor: "#f0f0f0",
++        borderRadius: 8,
++        padding: 10,
++        marginRight: 5,
++    },
++    sendButton: {
++        backgroundColor: "#007AFF",
++        paddingVertical: 10,
++        paddingHorizontal: 15,
++        borderRadius: 8,
++    },
++    sendText: {
++        color: "#fff",
++        fontWeight: "bold",
++    },
++
++    timestamp: {
++        fontSize: 10,
++        color: "#888",
++        marginTop: 4,
++        alignSelf: "flex-end",
++    },
++
++    returnButton: {
++        flex: 0.5,
++        alignItems: "flex-start",
++        justifyContent: "center",
++    }, 
++});
+Index: ecomsaleapp/components/Cart/ShoppingCart.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { useEffect, useState } from \"react\";\r\nimport { Alert, Image, ScrollView, Text, TouchableOpacity, View } from \"react-native\";\r\nimport Apis, { endpoints } from \"../../configs/Apis\";\r\nimport Styles from \"./Styles\";\r\nimport AsyncStorage from \"@react-native-async-storage/async-storage\";\r\nimport { useNavigation } from \"@react-navigation/native\";\r\nimport Ionicons from 'react-native-vector-icons/Ionicons';\r\n\r\nconst ShoppingCart = ({route}) => {\r\n    const productId = route.params?.productId;\r\n    const [products, setProducts] = useState({});\r\n    const [myCart, setMyCart] = useState(null);\r\n    const navigation = useNavigation();\r\n    const loadCart = async () => {\r\n        try {\r\n            const token = await AsyncStorage.getItem(\"token\");\r\n            const headers = { Authorization: `Bearer ${token}` };\r\n\r\n            const res = await Apis.get(endpoints[\"my-cart\"], { headers });\r\n            setMyCart(res.data);\r\n        } catch (err) {\r\n            console.error(\"Lỗi khi load giỏ hàng:\", err);\r\n        }\r\n    };\r\n\r\n    const handleDeleteItem = async (productId) => {\r\n         try {\r\n            const token = await AsyncStorage.getItem(\"token\");\r\n            const headers = { Authorization: `Bearer ${token}` };\r\n\r\n            const body = {\r\n                \"product_id\": productId\r\n            }\r\n\r\n             await Apis.delete(endpoints[\"remove-product-cart\"], {\r\n                 headers,\r\n                 data: body,\r\n             });\r\n\r\n            Alert.alert(\"Thành công\", \"Đã xoá sản phẩm khỏi giỏ\");\r\n            \r\n            await loadCart();\r\n\r\n        } catch (err) {\r\n            console.error(err);\r\n            Alert.alert(\"Lỗi\", \"Không thể xoá sản phẩm khỏi giỏ\");\r\n        }\r\n    }\r\n\r\n    const loadProducts = async () => {\r\n        if (myCart && myCart.details) {\r\n            let newProducts = {};\r\n            for (let item of myCart.details) {\r\n                try {\r\n                    let res = await Apis.get(endpoints[\"product\"](item.product));\r\n                    newProducts[item.product] = res.data;\r\n                } catch (err) {\r\n                    console.error(\"Lỗi khi load sản phẩm:\", err);\r\n                }\r\n            }\r\n            setProducts(newProducts);\r\n            console.info(newProducts);\r\n        }\r\n    };\r\n\r\n    useEffect(() => {\r\n        loadCart();\r\n    }, []);\r\n\r\n    useEffect(() => {\r\n        loadProducts();\r\n    }, [myCart]);\r\n\r\n\r\n\r\n    if (myCart === null)\r\n        return (\r\n            <View style={{ padding: 16 }}>\r\n                <Text>Bạn chưa đăng nhập hoặc giỏ hàng trống.</Text>\r\n            </View>\r\n        );\r\n\r\n    return (\r\n        <View style={{flex: 1}}>\r\n            <View style={Styles.barHeader}>\r\n                <TouchableOpacity style={Styles.returnButton} onPress={() => {productId?navigation.replace(\"productdetail\", {productId: productId}):navigation.replace(\"home\")}}>\r\n                    <Ionicons name=\"return-down-back\" size={24} color=\"#2196F3\" />\r\n                </TouchableOpacity>\r\n                <Text style={{ fontSize: 18, fontWeight: \"bold\",  alignItems: \"center\"}}>\r\n                    Giỏ hàng của bạn\r\n                </Text>\r\n            </View>\r\n            <ScrollView style={{ padding: 16 }} contentContainerStyle={{paddingBottom: 55, paddingTop: 55}}>\r\n\r\n                {myCart.details.map((item) => {\r\n                    const product = products[item.product];\r\n\r\n                    return (\r\n                        <View\r\n                            key={item.id}\r\n                            style={{\r\n                                borderWidth: 1,\r\n                                borderColor: \"#ddd\",\r\n                                borderRadius: 8,\r\n                                padding: 12,\r\n                                marginBottom: 12,\r\n                                flexDirection: \"row\",\r\n                                alignItems: \"center\",\r\n                            }}\r\n                        >\r\n                            {product && product.images.length > 0 && (\r\n                                <Image\r\n                                    source={{ uri: product.images[0].image }}\r\n                                    style={{\r\n                                        width: 80,\r\n                                        height: 80,\r\n                                        borderRadius: 8,\r\n                                        marginRight: 12,\r\n                                    }}\r\n                                />\r\n                            )}\r\n\r\n                            <View style={{ flex: 1 }}>\r\n                                <Text style={{ fontWeight: \"bold\", fontSize: 16 }}>\r\n                                    {product ? product.name : \"Đang tải...\"}\r\n                                </Text>\r\n                                <Text>Giá: {product ? product.price.toLocaleString() : \"...\"}</Text>\r\n                                <Text>Số lượng: {item.quantity}</Text>\r\n                            </View>\r\n\r\n                            <TouchableOpacity\r\n                                onPress={() => handleDeleteItem(item.product)}\r\n                                style={{\r\n                                    backgroundColor: \"#ff4444\",\r\n                                    paddingVertical: 6,\r\n                                    paddingHorizontal: 12,\r\n                                    borderRadius: 6,\r\n                                }}\r\n                            >\r\n                                <Text style={{ color: \"#fff\", fontWeight: \"bold\" }}>Xoá</Text>\r\n                            </TouchableOpacity>\r\n                        </View>\r\n                    );\r\n                })}\r\n            </ScrollView>\r\n            <View style={Styles.barFooter}>\r\n                {myCart ?\r\n                    <Text style={Styles.productPriceText}>{myCart.total.toLocaleString()} VND</Text>\r\n                    : <Text style={Styles.productPriceText}>0 VND</Text>}\r\n                <TouchableOpacity style={Styles.buyNowButton} onPress={()=>navigation.replace(\"order\", {myCart: myCart})}>\r\n                    <Text style={{ color: '#fff', fontWeight: 'bold' }}>Mua ngay</Text>\r\n                </TouchableOpacity>\r\n            </View>\r\n        </View>\r\n    )\r\n}\r\n\r\nexport default ShoppingCart;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/Cart/ShoppingCart.js b/ecomsaleapp/components/Cart/ShoppingCart.js
+--- a/ecomsaleapp/components/Cart/ShoppingCart.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/components/Cart/ShoppingCart.js	(date 1748425714929)
+@@ -1,19 +1,28 @@
+-import { useEffect, useState } from "react";
+-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
++import { useCallback, useEffect, useState } from "react";
++import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+ import Apis, { endpoints } from "../../configs/Apis";
+ import Styles from "./Styles";
+ import AsyncStorage from "@react-native-async-storage/async-storage";
+ import { useNavigation } from "@react-navigation/native";
+ import Ionicons from 'react-native-vector-icons/Ionicons';
++import { useFocusEffect } from '@react-navigation/native';
+ 
+ const ShoppingCart = ({route}) => {
+     const productId = route.params?.productId;
+     const [products, setProducts] = useState({});
+     const [myCart, setMyCart] = useState(null);
++    const [isLoggedIn, setIsLoggedIn] = useState(true);
+     const navigation = useNavigation();
++    
+     const loadCart = async () => {
+         try {
+             const token = await AsyncStorage.getItem("token");
++
++            if (!token) {
++                setIsLoggedIn(false);
++                return;
++            }
++
+             const headers = { Authorization: `Bearer ${token}` };
+ 
+             const res = await Apis.get(endpoints["my-cart"], { headers });
+@@ -63,30 +72,63 @@
+         }
+     };
+ 
+-    useEffect(() => {
+-        loadCart();
+-    }, []);
++    useFocusEffect(
++        useCallback(() => {
++            loadCart();
++        }, [])
++    );
++
+ 
+     useEffect(() => {
+         loadProducts();
+     }, [myCart]);
+ 
+-
+-
+-    if (myCart === null)
++    if (!isLoggedIn) {
+         return (
+-            <View style={{ padding: 16 }}>
+-                <Text>Bạn chưa đăng nhập hoặc giỏ hàng trống.</Text>
++            <View style={{ flex: 1 }}>
++                <View style={Styles.barHeader}>
++                    <TouchableOpacity style={Styles.returnButton} onPress={() => { productId ? navigation.navigate("productdetail", { productId: productId }) : navigation.navigate("home") }}>
++                        <Ionicons name="return-down-back" size={24} color="#2196F3" />
++                    </TouchableOpacity>
++                    <Text style={Styles.textMyCart}>
++                        Giỏ hàng của bạn
++                    </Text>
++                </View>
++
++                <View style={{ padding: 16, paddingTop: 50, alignItems: "center" }}>
++                    <Text>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem giỏ hàng.</Text>
++                </View>
+             </View>
+         );
++    }
+ 
+-    return (
+-        <View style={{flex: 1}}>
+-            <View style={Styles.barHeader}>
+-                <TouchableOpacity style={Styles.returnButton} onPress={() => {productId?navigation.replace("productdetail", {productId: productId}):navigation.replace("home")}}>
++
++    if (myCart === null) {
++        return (
++            <View style={{ flex: 1 }}>
++                <View style={Styles.barHeader}>
++                    <TouchableOpacity style={Styles.returnButton} onPress={() => { productId ? navigation.navigate("productdetail", { productId: productId }) : navigation.navigate("home") }}>
++                        <Ionicons name="return-down-back" size={24} color="#2196F3" />
++                    </TouchableOpacity>
++                    <Text style={Styles.textMyCart}>
++                        Giỏ hàng của bạn
++                    </Text>
++                </View>
++
++                <View style={{ padding: 16, paddingTop: 50, alignItems: "center" }}>
++                    <Text>Đang tải giỏ hàng <ActivityIndicator size="small" color="#0000ff" /></Text>
++                </View>
++            </View>
++        );
++    }
++
++    return (
++        <View style={{flex: 1}}>
++            <View style={Styles.barHeader}>
++                <TouchableOpacity style={Styles.returnButton} onPress={() => {productId?navigation.navigate("productdetail", {productId: productId}):navigation.navigate("home")}}>
+                     <Ionicons name="return-down-back" size={24} color="#2196F3" />
+                 </TouchableOpacity>
+-                <Text style={{ fontSize: 18, fontWeight: "bold",  alignItems: "center"}}>
++                <Text style={Styles.textMyCart}>
+                     Giỏ hàng của bạn
+                 </Text>
+             </View>
+Index: ecomsaleapp/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { StatusBar } from 'expo-status-bar';\r\nimport { StyleSheet, Text, View } from 'react-native';\r\nimport { useNavigation } from '@react-navigation/native';\r\nimport { createNativeStackNavigator } from '@react-navigation/native-stack';\r\nimport Home from './components/Home/Home';\r\nimport Login from './components/User/Login';\r\nimport Register from './components/User/Register';\r\nimport ProductDetail from './components/Home/ProductDetail';\r\nimport ProductComment from './components/Home/ProductComment';\r\nimport { createBottomTabNavigator } from '@react-navigation/bottom-tabs';\r\nimport MyUserReducer from './reducers/MyUserReducer';\r\nimport { MyUserContext } from './configs/MyContext';\r\nimport { MyDispatchContext } from './configs/MyContext';\r\nimport { NavigationContainer } from '@react-navigation/native';\r\nimport Profile from './components/User/Profile';\r\nimport { useReducer, useContext, useEffect } from 'react';\r\nimport { Icon } from 'react-native-paper';\r\nimport MyShop from './components/Shop/MyShop';\r\nimport ShopDetail from './components/Shop/ShopDetail';\r\nimport ReplyComment from './components/Home/ReplyComment';\r\nimport CreateProduct from './components/Shop/CreateShopProduct';\r\nimport { Provider as PaperProvider } from 'react-native-paper';\r\nimport Order from './components/Order/Order';\r\nimport PaymentsPaypal from './components/Order/PaymentsPaypal';\r\nimport ShoppingCart from './components/Cart/ShoppingCart';\r\nimport ShopStats from './components/Shop/ShopStats';\r\nimport CreateShop from './components/Shop/CreateShop';\r\nimport Chat from './components/Chat/Chat';\r\n\r\n\r\nconst Stack = createNativeStackNavigator();\r\n\r\nconst StackNavigate = () => {\r\n  return (\r\n    <Stack.Navigator  screenOptions={{headerShown: false}}>\r\n      <Stack.Screen name=\"home\" component={Home} />\r\n      <Stack.Screen name=\"productdetail\" component={ProductDetail} />\r\n      <Stack.Screen name=\"productcomment\" component={ProductComment} />\r\n      <Stack.Screen name=\"replycomment\" component={ReplyComment}/>\r\n      <Stack.Screen name=\"order\" component={Order}/>\r\n      <Stack.Screen name=\"MyShop\" component={MyShop} options={{title: \"Shop\"}}/>\r\n      <Stack.Screen name=\"ShopDetail\" component={ShopDetail}/>\r\n      <Stack.Screen name=\"paymentspaypal\" component={PaymentsPaypal}/>\r\n      <Stack.Screen name=\"shoppingcart\" component={ShoppingCart}/>\r\n      <Stack.Screen name=\"chat\" component={Chat}/>\r\n    </Stack.Navigator>\r\n  )\r\n}\r\n\r\nconst ShopNavigate =()=>{\r\n  return(\r\n    <Stack.Navigator initialRouteName=\"myshop\" screenOptions={{headerShown: false}}>\r\n        <Stack.Screen name=\"myshop\" component={MyShop} />\r\n        <Stack.Screen name=\"shopdetail\" component={ShopDetail} />\r\n        <Stack.Screen name=\"createproduct\" component={CreateProduct}/>\r\n        <Stack.Screen name=\"productdetail\" component={ProductDetail}/>\r\n        <Stack.Screen name=\"shopstats\" component={ShopStats}/>\r\n        <Stack.Screen name=\"createshop\" component={CreateShop}/>\r\n    </Stack.Navigator>\r\n  )\r\n}\r\n\r\nconst Tab = createBottomTabNavigator();\r\n\r\nconst TabNavigator = () => {\r\n  const user = useContext(MyUserContext)\r\n\r\n  return (\r\n    <Tab.Navigator screenOptions={{headerShown: true}}>\r\n      <Tab.Screen name='index' component={StackNavigate} options={{title: \"EcomSale\", tabBarIcon: () => <Icon size={30} source=\"home\" />}}/>\r\n\r\n      {user === null || user._j==null ? <>\r\n        <Tab.Screen name=\"login\" component={Login} options={{ title: \"Đăng nhập\", tabBarIcon: () => <Icon source=\"account\" size={20} /> }} />\r\n        <Tab.Screen name=\"register\" component={Register} options={{ title: \"Đăng ký\", tabBarIcon: () => <Icon source=\"account-plus\" size={20} /> }} />\r\n      </> : <>\r\n        <Tab.Screen name=\"profile\" component={Profile} options={{ title: \"Tài khoản\", tabBarIcon: () => <Icon source=\"account\" size={20} /> }} />\r\n        <Tab.Screen name=\"MyShop\" component={ShopNavigate} options={{ title: \"Cửa hàng\", tabBarIcon: () => <Icon source=\"account\" size={20} /> }} />\r\n      </>}\r\n    </Tab.Navigator>\r\n  )\r\n}\r\n\r\n\r\nexport default App = () => {\r\n  const [user, dispatch] = useReducer(MyUserReducer, null)\r\n\r\n  return (\r\n    <PaperProvider>\r\n      <MyUserContext.Provider value={user}>\r\n        <MyDispatchContext.Provider value={dispatch}>\r\n          <NavigationContainer>\r\n\r\n            <TabNavigator />\r\n\r\n          </NavigationContainer>\r\n        </MyDispatchContext.Provider>\r\n      </MyUserContext.Provider>\r\n    </PaperProvider>\r\n  );\r\n}\r\n\r\nconst styles = StyleSheet.create({\r\n  container: {\r\n    flex: 1,\r\n    backgroundColor: '#fff',\r\n    alignItems: 'center',\r\n    justifyContent: 'center',\r\n  },\r\n});
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/App.js b/ecomsaleapp/App.js
+--- a/ecomsaleapp/App.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/App.js	(date 1748425714929)
+@@ -26,6 +26,8 @@
+ import ShopStats from './components/Shop/ShopStats';
+ import CreateShop from './components/Shop/CreateShop';
+ import Chat from './components/Chat/Chat';
++import HistoryChat from './components/Chat/HistoryChat';
++import HistoryOrders from './components/Order/HistoryOrders';
+ 
+ 
+ const Stack = createNativeStackNavigator();
+@@ -60,6 +62,17 @@
+   )
+ }
+ 
++const ProfileNavigate = () => {
++  return (
++    <Stack.Navigator initialRouteName='profile_main' screenOptions={{headerShown: false}}>
++      <Stack.Screen name="profile_main" component={Profile} />
++      <Stack.Screen name="historychat" component={HistoryChat} />
++      <Stack.Screen name="historyorders" component={HistoryOrders}/>
++      <Stack.Screen name="chat" component={Chat}/>
++    </Stack.Navigator>
++  )
++}
++
+ const Tab = createBottomTabNavigator();
+ 
+ const TabNavigator = () => {
+@@ -73,7 +86,7 @@
+         <Tab.Screen name="login" component={Login} options={{ title: "Đăng nhập", tabBarIcon: () => <Icon source="account" size={20} /> }} />
+         <Tab.Screen name="register" component={Register} options={{ title: "Đăng ký", tabBarIcon: () => <Icon source="account-plus" size={20} /> }} />
+       </> : <>
+-        <Tab.Screen name="profile" component={Profile} options={{ title: "Tài khoản", tabBarIcon: () => <Icon source="account" size={20} /> }} />
++        <Tab.Screen name="profile" component={ProfileNavigate} options={{title: "Tài khoản", tabBarIcon: () => <Icon source="account" size={20}/>}}/>
+         <Tab.Screen name="MyShop" component={ShopNavigate} options={{ title: "Cửa hàng", tabBarIcon: () => <Icon source="account" size={20} /> }} />
+       </>}
+     </Tab.Navigator>
+Index: ecomsaleapp/utils/formatTime.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/utils/formatTime.js b/ecomsaleapp/utils/formatTime.js
+new file mode 100644
+--- /dev/null	(date 1748425714929)
++++ b/ecomsaleapp/utils/formatTime.js	(date 1748425714929)
+@@ -0,0 +1,7 @@
++const formatTime = (timestamp) => {
++    const date = new Date(timestamp);
++    return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")} ${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getFullYear()}`;
++};
++
++export default formatTime;
++
+Index: ecomsaleapp/components/Chat/HistoryChat.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/Chat/HistoryChat.js b/ecomsaleapp/components/Chat/HistoryChat.js
+new file mode 100644
+--- /dev/null	(date 1748425714929)
++++ b/ecomsaleapp/components/Chat/HistoryChat.js	(date 1748425714929)
+@@ -0,0 +1,222 @@
++import React, { useEffect, useState } from "react";
++import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image, StyleSheet } from "react-native";
++import AsyncStorage from "@react-native-async-storage/async-storage";
++import { getDatabase, ref, onValue } from "firebase/database";
++import Apis, { endpoints } from "../../configs/Apis";
++import formatTime from "../../utils/formatTime";
++import Ionicons from 'react-native-vector-icons/Ionicons';
++
++const HistoryChat = ({ navigation }) => {
++    const [userId, setUserId] = useState(null);
++    const [chatList, setChatList] = useState([]);
++    const [loading, setLoading] = useState(true);
++    const [otherUser, setOtherUser] = useState({});
++
++    useEffect(() => {
++        const fetchChats = async () => {
++            const storedUserId = await AsyncStorage.getItem("userId");
++
++            if (!storedUserId) {
++                setLoading(false);
++                return;
++            }
++
++            setUserId(storedUserId);
++            const db = getDatabase();
++            const chatsMetadataRef = ref(db, "chatsMetadata");
++
++            onValue(chatsMetadataRef, async (snapshot) => {
++                const data = snapshot.val();
++                if (!data) {
++                    setChatList([]);
++                    setLoading(false);
++                    return;
++                }
++
++                const userChats = Object.entries(data)
++                    .filter(([_, chat]) =>
++                        String(chat.buyerId) === storedUserId || String(chat.sellerId) === storedUserId
++                    )
++                    .map(([chatId, chat]) => ({
++                        id: chatId,
++                        otherUserId: String(chat.buyerId) === storedUserId ? String(chat.sellerId) : String(chat.buyerId),
++                        lastMessage: chat.lastMessage || "",
++                        timestamp: chat.timestamp || 0,
++                    }))
++                    .sort((a, b) => b.timestamp - a.timestamp);
++
++                setChatList(userChats);
++
++                const userData = {};
++                await Promise.all(userChats.map(async (chat) => {
++                    try {
++                        const res = await Apis.get(endpoints['user-by-id'](chat.otherUserId));
++                        userData[chat.otherUserId] = res.data;
++                    } catch (e) {
++                        console.error(`Error fetching user ${chat.otherUserId}:`, e);
++                    }
++                }));
++
++                setOtherUser(userData);
++                setLoading(false);
++            });
++        };
++
++        fetchChats();
++    }, []);
++
++    const renderItem = ({ item }) => {
++        const user = otherUser[item.otherUserId];
++
++        return (
++            <TouchableOpacity
++                onPress={() => navigation.navigate("chat", { otherUserId: item.otherUserId })}
++                style={styles.chatContainer}
++            >
++                <Image
++                    source={{
++                        uri: user?.avatar
++                            ? `https://res.cloudinary.com/dwivkhh8t/${user.avatar}`
++                            : "https://via.placeholder.com/60",
++                    }}
++                    style={styles.avatar}
++                />
++                <View style={styles.chatInfo}>
++                    <Text style={styles.username}>{user?.username}</Text>
++                    <Text numberOfLines={1} style={styles.lastMessage}>
++                        {item.lastMessage}
++                    </Text>
++                    <Text style={styles.timestamp}>{formatTime(item.timestamp)}</Text>
++                </View>
++            </TouchableOpacity>
++        );
++    };
++
++    if (loading) {
++        return (
++            <View style={styles.loaderContainer}>
++                <ActivityIndicator size="large" color="#000" />
++            </View>
++        );
++    }
++
++    return (
++        <View style={styles.container}>
++            <View style={styles.barHeader}>
++                <TouchableOpacity style={styles.returnButton} onPress={() => navigation.navigate("profile_main")}>
++                    <Ionicons name="return-down-back" size={24} color="#2196F3" />
++                </TouchableOpacity>
++                <Text style={styles.textMyCart}>
++                    Lịch sử tin nhắn
++                </Text>
++            </View>
++            <FlatList
++                data={chatList}
++                keyExtractor={(item) => item.id}
++                renderItem={renderItem}
++                ListEmptyComponent={<Text style={styles.emptyText}>Không có cuộc trò chuyện nào.</Text>}
++                contentContainerStyle={{ paddingBottom: 20, paddingTop: 50 }}
++            />
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        flex: 1,
++        padding: 16,
++        backgroundColor: '#fff',
++    },
++
++    chatContainer: {
++        flexDirection: "row",
++        alignItems: "center",
++        padding: 16,
++        borderBottomWidth: 1,
++        borderBottomColor: "#eee",
++        backgroundColor: "#fff",
++    },
++
++    avatar: {
++        width: 60,
++        height: 60,
++        borderRadius: 30,
++        marginRight: 12,
++        backgroundColor: "#f0f0f0",
++    },
++
++    chatInfo: {
++        flex: 1,
++        justifyContent: "center",
++    },
++
++    username: {
++        fontSize: 16,
++        fontWeight: "600",
++        color: "#333",
++        marginBottom: 4,
++    },
++
++    lastMessage: {
++        fontSize: 14,
++        color: "#666",
++    },
++
++    loaderContainer: {
++        flex: 1,
++        justifyContent: "center",
++        alignItems: "center",
++        backgroundColor: "#fff",
++    },
++
++    emptyText: {
++        textAlign: "center",
++        padding: 20,
++        fontSize: 16,
++        color: "#888",
++    },
++
++    timestamp: {
++        fontSize: 10,
++        color: "#888",
++        marginTop: 4,
++        alignSelf: "flex-end",
++    },
++        barHeader: {
++        flexDirection: 'row',
++        alignItems: 'center',
++        backgroundColor: '#fff',
++        paddingHorizontal: 12,
++        paddingVertical: 8,
++        borderBottomWidth: 1,
++        borderColor: '#e0e0e0',
++        position: 'absolute',
++        top: 0,
++        left: 0,
++        right: 0,
++        zIndex: 999,
++        elevation: 4,
++        shadowColor: '#000',
++        shadowOffset: { width: 0, height: 2 },
++        shadowOpacity: 0.1,
++        shadowRadius: 3,
++    },
++
++    returnButton: {
++        flex: 0.8,
++        alignItems: "flex-start",
++        justifyContent: "center",
++    },
++
++    textMyCart: {
++        position: 'absolute',
++        left: 0,
++        right: 0,
++        textAlign: 'center',
++        fontSize: 18,
++        fontWeight: 'bold',
++        zIndex: -1
++    }
++});
++
++export default HistoryChat;
+Index: ecomsaleapp/components/Order/HistoryOrders.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/Order/HistoryOrders.js b/ecomsaleapp/components/Order/HistoryOrders.js
+new file mode 100644
+--- /dev/null	(date 1748425714929)
++++ b/ecomsaleapp/components/Order/HistoryOrders.js	(date 1748425714929)
+@@ -0,0 +1,140 @@
++import AsyncStorage from "@react-native-async-storage/async-storage";
++import { useCallback, useEffect, useState } from "react";
++import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
++import Apis, { endpoints } from "../../configs/Apis";
++import Ionicons from 'react-native-vector-icons/Ionicons';
++import { useNavigation } from "@react-navigation/native";
++
++const HistoryOrders = () => {
++    const [historyOrders, setHistoryOrders] = useState([]);
++    const [page, setPage] = useState(1);
++    const [loading, setLoading] = useState(false);
++    const [hasMore, setHasMore] = useState(true);
++    const navigation = useNavigation();
++
++    const loadHistoryOrders = async (currentPage = 1) => {
++        if (loading || !hasMore) return;
++
++        setLoading(true);
++        try {
++            const token = await AsyncStorage.getItem("token");
++            if (!token) return;
++
++            const headers = { Authorization: `Bearer ${token}` };
++            const url = `${endpoints["history-orders"]}?page=${currentPage}`;
++
++            const res = await Apis.get(url, { headers });
++            const newOrders = res.data.results;
++
++            if (!res.data.next) setHasMore(false);
++
++            setHistoryOrders(prev => [...prev, ...newOrders]);
++        } catch (err) {
++            console.error("Lỗi khi load lịch sử đơn hàng:", err);
++        } finally {
++            setLoading(false);
++        }
++    };
++
++    useEffect(() => {
++        loadHistoryOrders(page);
++    }, [page]);
++
++    const loadMore = () => {
++        if (!loading && hasMore) {
++            setPage(prev => prev + 1);
++        }
++    };
++
++    const renderOrderItem = ({ item }) => (
++        <View style={styles.orderItem}>
++            <Text style={styles.orderId}>Đơn hàng #{item.id}</Text>
++            <Text>Địa chỉ giao hàng: {item.shipping_address}</Text>
++            <Text>Tổng tiền: {item.total.toLocaleString()} VND</Text>
++            <Text>Trạng thái: {item.status === "PAID" ? "Đã thanh toán" : item.status}</Text>
++        </View>
++    );
++
++    return (
++        <View style={styles.container}>
++            <View style={styles.barHeader}>
++                <TouchableOpacity style={styles.returnButton} onPress={() =>  navigation.navigate("profile_main") }>
++                    <Ionicons name="return-down-back" size={24} color="#2196F3" />
++                </TouchableOpacity>
++                <Text style={styles.textMyCart}>
++                    Lịch sử đơn hàng
++                </Text>
++            </View>
++            <FlatList
++                data={historyOrders}
++                keyExtractor={(item) => item.id.toString()}
++                renderItem={renderOrderItem}
++                contentContainerStyle={{ paddingBottom: 20, paddingTop: 50 }}
++                onEndReached={loadMore}
++                onEndReachedThreshold={0.5}
++                ListFooterComponent={loading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
++            />
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        flex: 1,
++        padding: 16,
++        backgroundColor: '#fff',
++    },
++
++    orderItem: {
++        borderWidth: 1,
++        borderColor: '#ddd',
++        borderRadius: 8,
++        padding: 12,
++        marginBottom: 12,
++        backgroundColor: '#f9f9f9',
++    },
++
++    orderId: {
++        fontWeight: 'bold',
++        fontSize: 16,
++        marginBottom: 4,
++    },
++
++    barHeader: {
++        flexDirection: 'row',
++        alignItems: 'center',
++        backgroundColor: '#fff',
++        paddingHorizontal: 12,
++        paddingVertical: 8,
++        borderBottomWidth: 1,
++        borderColor: '#e0e0e0',
++        position: 'absolute',
++        top: 0,
++        left: 0,
++        right: 0,
++        zIndex: 999,
++        elevation: 4,
++        shadowColor: '#000',
++        shadowOffset: { width: 0, height: 2 },
++        shadowOpacity: 0.1,
++        shadowRadius: 3,
++    },
++
++    returnButton: {
++        flex: 0.8,
++        alignItems: "flex-start",
++        justifyContent: "center",
++    },
++
++    textMyCart: {
++        position: 'absolute',
++        left: 0,
++        right: 0,
++        textAlign: 'center',
++        fontSize: 18,
++        fontWeight: 'bold',
++        zIndex: -1
++    }
++});
++
++export default HistoryOrders;
+Index: ecomsaleapp/components/User/Profile.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { use, useContext, useEffect, useState } from \"react\";\r\nimport { MyDispatchContext, MyUserContext } from \"../../configs/MyContext\";\r\nimport { SafeAreaView, View, StyleSheet, Image } from \"react-native\";\r\nimport { Button, Text } from \"react-native-paper\";\r\nimport { useNavigation } from \"@react-navigation/native\";\r\nimport AsyncStorage from \"@react-native-async-storage/async-storage\";\r\n\r\nconst Profile = () => {\r\n    const user = useContext(MyUserContext);\r\n    const dispatch = useContext(MyDispatchContext);\r\n    const navigation = useNavigation();\r\n    const[loading,setLoading]=useState(false)\r\n\r\n    if (user?._j !== null) {\r\n        const u = user._j;\r\n\r\n    const logout= async ()=>{\r\n        try{\r\n            setLoading(true)\r\n            await AsyncStorage.removeItem(\"token\")\r\n            dispatch({\r\n                \"type\":\"logout\",\r\n            })\r\n        }catch(ex){\r\n            console.info(ex)\r\n        }finally{\r\n            setLoading(false)\r\n            console.info(user)\r\n        }\r\n        \r\n    }\r\n\r\n        return (\r\n            <SafeAreaView style={styles.container}>  \r\n                <View style={styles.card}>\r\n                    {u.avatar && (\r\n                        <Image source={{ uri: `https://res.cloudinary.com/dwivkhh8t/${u.avatar}` }} style={styles.avatar} />\r\n                    )}\r\n                    <Text style={styles.name}>{u.first_name} {u.last_name}</Text>\r\n                    <Text style={styles.username}>@{u.username}</Text>\r\n\r\n                    <Button\r\n                        mode=\"contained\"\r\n                        style={styles.button}\r\n                        icon=\"history\"\r\n                        // onPress={() => navigation.navigate(\"order\")}\r\n                    >\r\n                        Xem lịch sử đơn hàng\r\n                    </Button>\r\n\r\n                    <Button\r\n                        mode=\"contained\"\r\n                        style={[styles.button, { backgroundColor: \"#03A9F4\" }]}\r\n                        icon=\"message-text\"\r\n                        // onPress={() => navigation.navigate(\"chat\")}\r\n                    >\r\n                        Xem lịch sử chat\r\n                    </Button>\r\n\r\n                    <Button\r\n                        disabled={loading} \r\n                        loading={loading}\r\n                        mode=\"outlined\"\r\n                        onPress={logout}\r\n                        style={styles.logoutButton}\r\n                        labelStyle={{ color: \"#e53935\" }}\r\n                        icon=\"logout\"\r\n                    >\r\n                        Đăng xuất\r\n                    </Button>\r\n                </View>\r\n            </SafeAreaView>\r\n        );\r\n    }\r\n\r\n    return null;\r\n};\r\n\r\nexport default Profile;\r\n\r\nconst styles = StyleSheet.create({\r\n    container: {\r\n        flex: 1,\r\n        backgroundColor: \"#f2f2f2\",\r\n        justifyContent: \"center\",\r\n        alignItems: \"center\",\r\n        padding: 20,\r\n    },\r\n    card: {\r\n        backgroundColor: \"#ffffff\",\r\n        borderRadius: 16,\r\n        padding: 24,\r\n        width: \"100%\",\r\n        alignItems: \"center\",\r\n        shadowColor: \"#000\",\r\n        shadowOffset: { width: 0, height: 2 },\r\n        shadowOpacity: 0.1,\r\n        shadowRadius: 6,\r\n        elevation: 4,\r\n    },\r\n    avatar: {\r\n        width: 100,\r\n        height: 100,\r\n        borderRadius: 50,\r\n        marginBottom: 16,\r\n    },\r\n    name: {\r\n        fontSize: 22,\r\n        fontWeight: \"600\",\r\n        color: \"#333\",\r\n    },\r\n    username: {\r\n        fontSize: 16,\r\n        color: \"#666\",\r\n        marginBottom: 4,\r\n    },\r\n    phone: {\r\n        fontSize: 16,\r\n        color: \"#666\",\r\n        marginBottom: 16,\r\n    },\r\n    button: {\r\n        width: \"100%\",\r\n        marginVertical: 8,\r\n        borderRadius: 10,\r\n    },\r\n    logoutButton: {\r\n        width: \"100%\",\r\n        marginTop: 20,\r\n        borderWidth: 1,\r\n        borderColor: \"#e53935\",\r\n        borderRadius: 10,\r\n    },\r\n});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ecomsaleapp/components/User/Profile.js b/ecomsaleapp/components/User/Profile.js
+--- a/ecomsaleapp/components/User/Profile.js	(revision 47c61c4497c3c64bb03764d5c62e534a1b1a0ecf)
++++ b/ecomsaleapp/components/User/Profile.js	(date 1748425714929)
+@@ -18,6 +18,8 @@
+         try{
+             setLoading(true)
+             await AsyncStorage.removeItem("token")
++            await AsyncStorage.removeItem("userId")
++            await AsyncStorage.removeItem("userName")
+             dispatch({
+                 "type":"logout",
+             })
+@@ -43,7 +45,7 @@
+                         mode="contained"
+                         style={styles.button}
+                         icon="history"
+-                        // onPress={() => navigation.navigate("order")}
++                        onPress={() => navigation.navigate("historyorders")}
+                     >
+                         Xem lịch sử đơn hàng
+                     </Button>
+@@ -52,7 +54,7 @@
+                         mode="contained"
+                         style={[styles.button, { backgroundColor: "#03A9F4" }]}
+                         icon="message-text"
+-                        // onPress={() => navigation.navigate("chat")}
++                        onPress={() => navigation.navigate("historychat")}
+                     >
+                         Xem lịch sử chat
+                     </Button>
