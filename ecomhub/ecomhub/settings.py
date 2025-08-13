@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'ecomhub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommercedb',
+        'NAME': 'ecommercedb_v56v',
         'USER': 'ecommercedb_v56v_user',
         'PASSWORD': 'B8XdqCGlQusGBzvojLem7g40JBw3bgrN',
         'HOST': 'dpg-d2e3q57diees73d7vbf0-a',
