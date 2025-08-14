@@ -149,9 +149,9 @@ from cloudinary.utils import cloudinary_url
 
 # Configuration
 cloudinary.config(
-    cloud_name="dwivkhh8t",
-    api_key="925656835271691",
-    api_secret="xggQhqIzVzwLbOJx05apmM4Od7U",  # Click 'View API Keys' above to copy your API secret
+    cloud_name="dvlwb6o7e",
+    api_key="315637758944728",
+    api_secret="A34d8SUWJZnBLiGAgOPEIhqRB_c",  # Click 'View API Keys' above to copy your API secret
     secure=True
 )
 
