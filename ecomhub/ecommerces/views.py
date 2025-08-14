@@ -57,9 +57,8 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
 
             u.save()
             return Response(serializers.UserSerializer(u).data)
-        response=requests.get('http://127.0.0.1:8000/categorys/')
-        print(response.json())
-        return Response(response.json())
+
+        return Response(serializers.UserSerializer(request.user).data)
 
     @action(methods=['get'], url_path='unapproved-user', detail=False,permission_classes=[permissions.IsAdminUser])
     def get_unapproved_user(self,request):
