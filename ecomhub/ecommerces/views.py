@@ -368,11 +368,34 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
         items = request.data.get('items', [])
         product_ids=[]
         shop_orders = []
+        inventorys=[]
         if not items:
             return Response({'error': 'Danh sách sản phẩm không được để trống'},status=status.HTTP_400_BAD_REQUEST)
 
         for item in items:
+            product=item.get("product_id")
+            size=item.get("size")
+            color=item.get("color")
+            try:
+                inventory = Inventory.objects.get(product=product, size=size, color=color)
+            except Inventory.DoesNotExist:
+                return Response(
+                    {"error": f"Sản phẩm '{product.name}' không có size '{size}' và màu '{color}'"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+
+                # Kiểm tra số lượng tồn kho
+            quantity = int(item.get("quantity", 1))
+            if inventory.quantity < quantity:
+                return Response(
+                    {
+                        "error": f"Sản phẩm '{product.name}' size '{size}' màu '{color}' chỉ còn {inventory.quantity} sản phẩm"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             product_ids.append(item.get("product_id"))
+            i=Inventory.objects.filter(product=product,size=size,color=color)
+            inventorys.append(i)
         products = Product.objects.filter(id__in=product_ids).select_related("shop")
         product_map={p.id: p for p in products}
 
@@ -638,9 +661,6 @@ class CartViewSet(viewsets.GenericViewSet):
         color=request.data.get('color')
         stock=0
         inventory=Inventory.objects.filter(product=product_id)
-        print(size)
-        print(color)
-        print(inventory)
         if size is not None:
             inventory=inventory.filter(size=size)
         if color is not None:
