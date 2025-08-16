@@ -142,7 +142,7 @@ class ShopOrderSerializer(ModelSerializer):
 class ShopOrderDetailSerializer(ModelSerializer):
     class Meta:
         model=ShopOrderDetail
-        fields=['id','shop_order','product','quantity']
+        fields=['id','shop_order','product','quantity','inventory']
 
 
 

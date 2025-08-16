@@ -366,54 +366,47 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
         phone = request.data.get("phone")
         order_status = request.data.get("status")
         items = request.data.get('items', [])
-        product_ids=[]
+        product_ids = []
         shop_orders = []
-        inventorys=[]
+        inventorys = []
         if not items:
-            return Response({'error': 'Danh sách sản phẩm không được để trống'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Danh sách sản phẩm không được để trống'}, status=status.HTTP_400_BAD_REQUEST)
 
         for item in items:
-            product=item.get("product_id")
-            size=item.get("size")
-            color=item.get("color")
+            product = item.get("product_id")
+            size = item.get("size")
+            color = item.get("color")
             try:
                 inventory = Inventory.objects.get(product=product, size=size, color=color)
             except Inventory.DoesNotExist:
                 return Response(
-                    {"error": f"Sản phẩm '{product.name}' không có size '{size}' và màu '{color}'"},
+                    {"error": f"Sản phẩm không có size '{size}' và màu '{color}'"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
 
                 # Kiểm tra số lượng tồn kho
             quantity = int(item.get("quantity", 1))
             if inventory.quantity < quantity:
                 return Response(
                     {
-                        "error": f"Sản phẩm '{product.name}' size '{size}' màu '{color}' chỉ còn {inventory.quantity} sản phẩm"},
+                        "error": f"Sản phẩm này, size '{size}' màu '{color}' chỉ còn {inventory.quantity} sản phẩm"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             product_ids.append(item.get("product_id"))
-            i=Inventory.objects.filter(product=product,size=size,color=color)
-            inventorys.append(i)
+            inventorys.append(inventory)
         products = Product.objects.filter(id__in=product_ids).select_related("shop")
-        product_map={p.id: p for p in products}
+        product_map = {p.id: p for p in products}
 
-        shop_items=defaultdict(list)
-        total=0
+        shop_items = defaultdict(list)
+        total = 0
 
-        for item in items:
-            product_id=item.get("product_id")
-            quantity=int(item.get("quantity",1))
-            p=product_map[product_id]
+        for item, inv in zip(items, inventorys):
+            product_id = item.get("product_id")
+            quantity = int(item.get("quantity", 1))
+            p = product_map[product_id]
 
-            shop_items[p.shop.id].append((p, quantity))
-            # print(shop_items)
-            print(quantity)
-            print(p.price)
-            total+=p.price*quantity
-            # total += p.price
-            print(total)
+            shop_items[p.shop.id].append((p, quantity, inv))
+            total += p.price * quantity
         order = Order.objects.create(
             user=User.objects.filter(is_superuser=True).first(),
             shipping_address=shipping_address,
@@ -424,17 +417,18 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
 
         for shop_id, product_list in shop_items.items():
             shop = product_list[0][0].shop
-            shop_order = ShopOrder.objects.create(shop=shop, order=order,total=0)
+            shop_order = ShopOrder.objects.create(shop=shop, order=order, total=0)
 
             shop_total = 0
             # print(product_list)
-            for product, quantity in product_list:
-
-                ShopOrderDetail.objects.create(shop_order=shop_order, product=product, quantity=quantity)
+            for product, quantity, inv in product_list:
+                ShopOrderDetail.objects.create(shop_order=shop_order, product=product, quantity=quantity, inventory=inv)
                 shop_total += product.price * quantity
                 # print(product.price)
                 # print(quantity)
-                # print("phí hóad đơn:"+str(shop_total))
+                # print("phí hóad đơn:"+str(shop_total))s
+                inv.quantity -= quantity
+                inv.save()
 
             shop_orders.append(shop_order)
 
@@ -445,7 +439,7 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
             'message': 'Đặt hàng thành công',
             'order_id': order.id,
             'order': OrderSerializer(order).data,
-            'shop_order':ShopOrderSerializer(shop_orders,many=True).data
+            'shop_order': ShopOrderSerializer(shop_orders, many=True).data
 
         }, status=status.HTTP_201_CREATED)
 
