@@ -684,10 +684,11 @@ class CartViewSet(viewsets.GenericViewSet):
 
         cart_detail, created = CartDetail.objects.get_or_create(
             cart=cart,
-            sku=size+'-'+color,
             product=product,
-            defaults={'quantity': quantity,
-                      'sku':size+color+product}
+            size=size,
+            color=color,
+            defaults={'quantity': quantity
+                      }
         )
 
         if not created:
