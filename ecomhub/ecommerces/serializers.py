@@ -158,7 +158,7 @@ class ShopOrderDetailSerializer(ModelSerializer):
 class CartDetailSerializer(ModelSerializer):
     class Meta:
         model = CartDetail
-        fields = ['id', 'quantity', 'product', 'cart','sku']
+        fields = ['id', 'quantity', 'product', 'cart','size','color']
 
 
 class CartSerializer(ModelSerializer):

@@ -687,7 +687,7 @@ class CartViewSet(viewsets.GenericViewSet):
             sku=size+'-'+color,
             product=product,
             defaults={'quantity': quantity,
-                      'sku':size+color}
+                      'sku':size+color+product}
         )
 
         if not created:

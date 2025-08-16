@@ -130,7 +130,8 @@ class Cart(BaseModel):
 class CartDetail(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="cart_details")
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="details")
-    sku=models.CharField(max_length=100,default="")
+    size=models.CharField(max_length=100,default="")
+    color=models.CharField(max_length=100,default="")
     quantity = models.IntegerField()
 
 
