@@ -32,9 +32,9 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageInline, ]
 
 
-# class InventoryAdmin(admin.ModelAdmin):
-#     list_display = ['quantity', 'product']
-#     list_filter = ['quantity']
+class InventoryAdmin(admin.ModelAdmin):
+    list_display = ['quantity', 'product']
+    list_filter = ['quantity']
 
 
 class CartDetailInline(admin.TabularInline):
@@ -78,7 +78,7 @@ class CommentLikeAdmin(admin.ModelAdmin):
 
 admin.site.register(Shop, ShopAdmin)
 admin.site.register(Product, ProductAdmin)
-# admin.site.register(Inventory, InventoryAdmin)
+admin.site.register(Inventory, InventoryAdmin)
 admin.site.register(Cart, CartAdmin)
 # admin.site.register(Order, OrderAdmin)
 admin.site.register(Payment, PaymentAdmin)
