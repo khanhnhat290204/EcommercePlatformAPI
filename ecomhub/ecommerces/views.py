@@ -713,7 +713,7 @@ class CartViewSet(viewsets.GenericViewSet):
             return Response({'error': 'Vui lòng cung cấp ID sản phẩm.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            cart_detail = CartDetail.objects.get(cart=cart, product__id=product_id)
+            cart_detail = CartDetail.objects.filter(cart=cart, product__id=product_id)
             cart_detail.delete()
         except CartDetail.DoesNotExist:
             return Response({'error': 'Sản phẩm không tồn tại trong giỏ hàng.'}, status=status.HTTP_404_NOT_FOUND)
