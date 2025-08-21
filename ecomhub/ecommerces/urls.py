@@ -3,6 +3,7 @@ from . import views
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from .services.views_ai import AIChatView
 
 router = routers.DefaultRouter()
 router.register('categorys', views.CategoryViewSet)
@@ -20,8 +21,8 @@ schema_view = get_schema_view(
         title="EcomSale API",
         default_version='v1',
         description="APIs for EcomSaleApp",
-        contact=openapi.Contact(email="nguyenchau16112004@gmail.com"),
-        license=openapi.License(name="Châu Bình Nguyên@2025"),
+        contact=openapi.Contact(email="khanhnhat2902@gmail.com"),
+        license=openapi.License(name="Khanh Nhat@2025"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -40,6 +41,7 @@ urlpatterns = [
             name='schema-redoc'),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('shop/stats/', views.ShopRevenueStatsAPIView.as_view(), name='shop-revenue-stats'),
+    path("api/ai-chat/", AIChatView.as_view(), name="ai-chat"),
     # path('adminshop/stats/',views.AdminShopStatsView.as_view(),name='adminshop-revenue-stats'),
     path('paypal-success/', views.paypal_success_view, name='paypal-success'),
     path('paypal-cancel/', views.paypal_cancel_view, name='paypal-cancel'),
