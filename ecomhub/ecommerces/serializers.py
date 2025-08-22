@@ -86,7 +86,7 @@ class ProductSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['shop'] = instance.shop.__str__()  # or instance.shop.__str__()
+        # representation['shop'] = instance.shop.__str__()  # or instance.shop.__str__()
         representation['category'] = instance.category.__str__()
 
         view = self.context.get('view')
