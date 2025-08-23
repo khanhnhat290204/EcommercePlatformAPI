@@ -39,7 +39,7 @@ class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):
     serializer_class = CategorySerializer
 
 
-class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
+class UserViewSet(viewsets.ViewSet, generics.CreateAPIView,generics.RetrieveAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserSerializer
     parser_classes = [parsers.MultiPartParser, ]
