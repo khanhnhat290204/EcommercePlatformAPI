@@ -26,7 +26,8 @@ from rest_framework import viewsets, permissions, generics, parsers, status
 from rest_framework.decorators import action
 from .serializers import CategorySerializer, UserSerializer, ShopSerializer, ProductSerializer, CommentSerializer, \
     ProductImageSerializer, OrderSerializer, \
-    PaymentSerializer, CartSerializer, CartDetailSerializer, ShopOrderSerializer, InventorySerializer
+    PaymentSerializer, CartSerializer, CartDetailSerializer, ShopOrderSerializer, InventorySerializer, \
+    ShopOrderDetailSerializer
 from django.db.models import Sum, F, functions as db_func, Q,ExpressionWrapper, FloatField
 from rest_framework.views import APIView
 from django.conf import settings
@@ -489,6 +490,28 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
     #         orderdetails = orderdetails.filter(product__name__icontains=q)
     #
     #     return Response(OrderDetailWithProductSerializer(orderdetails, many=True).data, status=status.HTTP_200_OK)
+
+class ShopOrderViewSet(viewsets.ViewSet,generics.ListAPIView,generics.RetrieveAPIView):
+    queryset = ShopOrder.objects.filter(active=True)
+    serializer_class = ShopOrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        query=self.queryset
+        user=self.request.user
+
+        if self.action.__eq__('list'):
+            if user:
+                shop = Shop.objects.filter(user=user)
+                query=query.filter(shop__in=shop)
+        return query
+
+    @action(methods=['get'],detail=True,url_path='detail')
+    def get_shop_order_detail(self, request, *args, **kwargs):
+        shop_order=self.get_object()
+        detail=ShopOrderDetail.objects.filter(shop_order=shop_order)
+        response=ShopOrderDetailSerializer(detail,many=True).data
+        return Response(response,status=status.HTTP_200_OK)
 
 
 class PaymentViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView):

@@ -140,6 +140,8 @@ class ShopOrderSerializer(ModelSerializer):
         fields=['id','shop','shipping_fee','total','order']
 
 class ShopOrderDetailSerializer(ModelSerializer):
+    inventory = InventorySerializer()
+    product = ProductSerializer()
     class Meta:
         model=ShopOrderDetail
         fields=['id','shop_order','product','quantity','inventory']

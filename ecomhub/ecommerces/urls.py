@@ -14,6 +14,7 @@ router.register('comments', views.CommentViewSet)
 router.register('orders', views.OrderViewSet)
 router.register(r'payments', views.PaymentViewSet, basename='payments')
 router.register('carts', views.CartViewSet)
+router.register('shop_order',views.ShopOrderViewSet)
 # router.register('shoporder',views.ShopOrder)
 
 schema_view = get_schema_view(
