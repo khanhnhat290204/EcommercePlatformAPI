@@ -167,7 +167,7 @@ class ShopOrder(BaseModel):
     shop=models.ForeignKey(Shop,on_delete=models.CASCADE)
     shipping_fee=models.IntegerField(default=0)
     total=models.IntegerField()
-    order=models.ForeignKey(Order,on_delete=models.CASCADE)
+    order=models.ForeignKey(Order,on_delete=models.CASCADE,related_name="shop_orders")
 
 
 

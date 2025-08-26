@@ -350,12 +350,12 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
 
     def get_queryset(self):
         query = self.queryset
-
+        user=self.request.user
         if self.action.__eq__('list'):
+            query=query.filter(user=user)
             id = self.request.query_params.get('id')
             if id:
                 query = query.filter(id=id)
-
             return query
 
     def get_object(self):
@@ -480,16 +480,24 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
 
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
-    # @action(methods=['get'], detail=True, url_path='order_details')
-    # def get_order_details(self, request, pk):
-    #     order = self.get_object()
-    #     orderdetails = order.orderdetails.filter(active=True)
-    #
-    #     q = request.query_params.get('q')
-    #     if q:
-    #         orderdetails = orderdetails.filter(product__name__icontains=q)
-    #
-    #     return Response(OrderDetailWithProductSerializer(orderdetails, many=True).data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=True, url_path='order_details')
+    def get_order_details(self, request, pk):
+        order = self.get_object()
+        shop_order=ShopOrder.objects.filter(order=order)
+        detail={}
+        for so in shop_order:
+            odetails=ShopOrderDetail.objects.filter(shop_order=so)
+            data=ShopOrderDetailSerializer(odetails, many=True).data
+            detail[so.order_id]=data
+            print(detail)
+
+        return Response(data={ order:order.id,
+                               shipping_address:order.shipping_address,
+                               total:order.total,
+                               detail:detail
+                                     }
+                        , status=status.HTTP_200_OK)
 
 class ShopOrderViewSet(viewsets.ViewSet,generics.ListAPIView,generics.RetrieveAPIView):
     queryset = ShopOrder.objects.filter(active=True)
@@ -506,12 +514,14 @@ class ShopOrderViewSet(viewsets.ViewSet,generics.ListAPIView,generics.RetrieveAP
                 query=query.filter(shop__in=shop)
         return query
 
-    @action(methods=['get'],detail=True,url_path='detail')
-    def get_shop_order_detail(self, request, *args, **kwargs):
-        shop_order=self.get_object()
-        detail=ShopOrderDetail.objects.filter(shop_order=shop_order)
-        response=ShopOrderDetailSerializer(detail,many=True).data
-        return Response(response,status=status.HTTP_200_OK)
+    @action(methods=['get'], detail=True, url_path='detail')
+    def get_order_details(self, request, pk):
+        order = (Order.objects
+                 .prefetch_related('shop_orders__details')  
+                 .get(pk=pk))
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PaymentViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView):

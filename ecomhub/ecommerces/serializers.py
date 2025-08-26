@@ -128,23 +128,30 @@ class PaymentSerializer(ModelSerializer):
         fields = ['id', 'payment_method', 'total', 'status', 'order']
 
 
-class OrderSerializer(ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ['id', 'active', 'user', 'total', 'shipping_address', 'phone','status']
-
-
-class ShopOrderSerializer(ModelSerializer):
-    class Meta:
-        model = ShopOrder
-        fields=['id','shop','shipping_fee','total','order']
 
 class ShopOrderDetailSerializer(ModelSerializer):
     inventory = InventorySerializer()
     product = ProductSerializer()
+
     class Meta:
-        model=ShopOrderDetail
-        fields=['id','shop_order','product','quantity','inventory']
+        model = ShopOrderDetail
+        fields = ['id', 'product', 'quantity', 'inventory']
+
+
+class ShopOrderSerializer(ModelSerializer):
+    details = ShopOrderDetailSerializer(many=True, read_only=True)  # dùng related_name="details"
+
+    class Meta:
+        model = ShopOrder
+        fields = ['id', 'shop', 'shipping_fee', 'total', 'details']
+
+
+class OrderSerializer(ModelSerializer):
+    shop_orders = ShopOrderSerializer(many=True, read_only=True)  # dùng related_name="shop_orders"
+
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'total', 'shipping_address', 'phone', 'status', 'shop_orders']
 
 
 
