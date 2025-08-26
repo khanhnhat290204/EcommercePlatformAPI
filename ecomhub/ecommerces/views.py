@@ -409,7 +409,7 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
             shop_items[p.shop.id].append((p, quantity, inv))
             total += p.price * quantity
         order = Order.objects.create(
-            user=User.objects.filter(is_superuser=True).first(),
+            user=user,
             shipping_address=shipping_address,
             phone=phone,
             status=order_status,
