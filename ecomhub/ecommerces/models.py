@@ -172,7 +172,7 @@ class ShopOrder(BaseModel):
 
 
 class ShopOrderDetail(BaseModel):
-    shop_order = models.ForeignKey(ShopOrder, on_delete=models.CASCADE, related_name="orderdetails")
+    shop_order = models.ForeignKey(ShopOrder, on_delete=models.CASCADE, related_name="details")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orderdetails")
     quantity = models.IntegerField(default=0)
     inventory=models.ForeignKey(Inventory,on_delete=models.CASCADE, related_name="orderdetails",null=True)
