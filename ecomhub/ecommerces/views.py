@@ -481,23 +481,31 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
 
-    @action(methods=['get'], detail=True, url_path='order_details')
+    # @action(methods=['get'], detail=True, url_path='order_details')
+    # def get_order_details(self, request, pk):
+    #     order = self.get_object()
+    #     shop_order=ShopOrder.objects.filter(order=order)
+    #     detail={}
+    #     for so in shop_order:
+    #         odetails=ShopOrderDetail.objects.filter(shop_order=so)
+    #         data=ShopOrderDetailSerializer(odetails, many=True).data
+    #         detail[so.order_id]=data
+    #         print(detail)
+    #
+    #     return Response(data={ order:order.id,
+    #                            shipping_address:order.shipping_address,
+    #                            total:order.total,
+    #                            detail:detail
+    #                                  }
+    #                     , status=status.HTTP_200_OK)
+    @action(methods=['get'], detail=True, url_path='detail')
     def get_order_details(self, request, pk):
-        order = self.get_object()
-        shop_order=ShopOrder.objects.filter(order=order)
-        detail={}
-        for so in shop_order:
-            odetails=ShopOrderDetail.objects.filter(shop_order=so)
-            data=ShopOrderDetailSerializer(odetails, many=True).data
-            detail[so.order_id]=data
-            print(detail)
+        order = (Order.objects
+                 .prefetch_related('shop_orders__details')  # dùng related_name mới
+                 .get(pk=pk))
 
-        return Response(data={ order:order.id,
-                               shipping_address:order.shipping_address,
-                               total:order.total,
-                               detail:detail
-                                     }
-                        , status=status.HTTP_200_OK)
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ShopOrderViewSet(viewsets.ViewSet,generics.ListAPIView,generics.RetrieveAPIView):
     queryset = ShopOrder.objects.filter(active=True)
@@ -517,7 +525,7 @@ class ShopOrderViewSet(viewsets.ViewSet,generics.ListAPIView,generics.RetrieveAP
     @action(methods=['get'], detail=True, url_path='detail')
     def get_order_details(self, request, pk):
         order = (Order.objects
-                 .prefetch_related('shop_orders__details')  
+                 .prefetch_related('shop_orders__details')
                  .get(pk=pk))
 
         serializer = OrderSerializer(order)
