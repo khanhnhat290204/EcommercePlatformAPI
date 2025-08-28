@@ -14,6 +14,7 @@ from rest_framework import filters
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
+from django.db import transaction
 from rest_framework.templatetags.rest_framework import data, items
 from unicodedata import category
 from urllib3 import request
@@ -194,6 +195,57 @@ class ShopViewSet(viewsets.ViewSet, generics.ListCreateAPIView, generics.Retriev
 
         product.refresh_from_db()
         return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+
+    @action(methods=['put'], url_path='update_product/(?P<product_id>[^/.]+)', detail=True)
+    def update_product(self, request, pk=None, product_id=None):
+        try:
+            shop = self.get_object()
+            product = shop.products.get(pk=product_id)
+        except:
+            return Response({"error": "Sản phẩm không tồn tại hoặc không thuộc shop này!"},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        # Lấy dữ liệu từ request
+        name = request.data.get('name', product.name)
+        price = request.data.get('price', product.price)
+        category_id = request.data.get('category', product.category.id)
+
+        # Cập nhật thông tin cơ bản
+        product.name = name
+        product.price = price
+        product.category_id = category_id
+        product.save()
+
+        # Cập nhật inventory nếu có gửi dữ liệu
+        if request.data.get('size') and request.data.get('color') and request.data.get('quantity'):
+            size = json.loads(request.data.get('size'))
+            color = json.loads(request.data.get('color'))
+            quantity = json.loads(request.data.get('quantity'))
+
+            # Xóa biến thể cũ và tạo lại
+            product.inventory.all().delete()
+            for s, c, q in zip(size, color, quantity):
+                inv_serializer = InventorySerializer(data={
+                    'size': s,
+                    'color': c,
+                    'quantity': q,
+                    'product': product.id
+                })
+                inv_serializer.is_valid(raise_exception=True)
+                inv_serializer.save()
+
+        # Cập nhật ảnh nếu có gửi file
+        if request.FILES.getlist('images'):
+            for img in request.FILES.getlist('images'):
+                img_serializer = ProductImageSerializer(data={
+                    'product': product.id,
+                    'image': img
+                })
+                img_serializer.is_valid(raise_exception=True)
+                img_serializer.save()
+
+        product.refresh_from_db()
+        return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
 
 
 class ProductViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIView):
@@ -425,9 +477,6 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
             for product, quantity, inv in product_list:
                 ShopOrderDetail.objects.create(shop_order=shop_order, product=product, quantity=quantity, inventory=inv)
                 shop_total += product.price * quantity
-                # print(product.price)
-                # print(quantity)
-                # print("phí hóad đơn:"+str(shop_total))s
                 inv.quantity -= quantity
                 inv.save()
 
@@ -449,19 +498,34 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIV
     def cancel_order(self, request, pk):
         order = self.get_object()
 
+        # Kiểm tra quyền truy cập
         if order.user != request.user:
-            return Response({'error': 'Bạn không có quyền truy cập đơn hàng này'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Bạn không có quyền truy cập đơn hàng này'}, status=status.HTTP_403_FORBIDDEN)
 
-        payment = order.payment
-        payment.active = False
-        payment.status = False
+        # Dùng transaction để tránh lỗi ghi dữ liệu giữa chừng
+        with transaction.atomic():
+            # Cộng lại số lượng tồn kho cho từng sản phẩm
+            shop_orders = order.shop_orders.all()  # related_name='shop_orders' trong model ShopOrder
+            for shop_order in shop_orders:
+                details = shop_order.details.all()  # related_name='details' trong model ShopOrderDetail
+                for detail in details:
+                    inventory = detail.inventory
+                    inventory.quantity += detail.quantity  # Cộng lại số lượng khi hủy
+                    inventory.save()
 
-        order.active = False
-        order.status = 'CANCELLED'
-        order.save()
-        payment.save()
+            # Cập nhật trạng thái thanh toán (nếu có)
+            if hasattr(order, "payment") and order.payment:
+                order.payment.active = False
+                order.payment.status = False
+                order.payment.save()
 
-        return Response({'message': 'Đơn hàng đã được hủy thành công.'}, status=status.HTTP_200_OK)
+            # Cập nhật trạng thái đơn hàng
+            order.active = False
+            order.status = 'CANCELLED'
+            order.save()
+
+        return Response({'message': 'Đơn hàng đã được hủy thành công và số lượng sản phẩm đã được cập nhật.'},
+                        status=status.HTTP_200_OK)
 
     @action(methods=['patch'], detail=True, url_path='update_address')
     def update_address(self, request, pk):
