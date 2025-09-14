@@ -101,7 +101,7 @@ DATABASES = {
         'NAME': 'ecommercedb_xfbz',
         'USER': 'ecommercedb_xfbz_user',
         'PASSWORD': 'FCTbQqgVqk85Tp1PPE1YK1jsVsYEDyHL',
-        'HOST': 'dpg-d33gp9juibrs73ak9jgg-a',
+        'HOST': 'dpg-d33gp9juibrs73ak9jgg-a.oregon-postgres.render.com',
         'PORT':'5432' # mặc định localhost
     }
 }
