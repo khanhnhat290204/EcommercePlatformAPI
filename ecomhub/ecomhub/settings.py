@@ -98,10 +98,10 @@ WSGI_APPLICATION = 'ecomhub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommercedb_v56v',
-        'USER': 'ecommercedb_v56v_user',
-        'PASSWORD': 'B8XdqCGlQusGBzvojLem7g40JBw3bgrN',
-        'HOST': 'dpg-d2e3q57diees73d7vbf0-a',
+        'NAME': 'ecommercedb_xfbz',
+        'USER': 'ecommercedb_xfbz_user',
+        'PASSWORD': 'FCTbQqgVqk85Tp1PPE1YK1jsVsYEDyHL',
+        'HOST': 'dpg-d33gp9juibrs73ak9jgg-a',
         'PORT':'5432' # mặc định localhost
     }
 }
